@@ -11,7 +11,7 @@ from openpyxl.utils import get_column_letter
 
 wb = openpyxl.Workbook()
 sheet = wb.active
-  
+#Creates the excell spreadsheet  
 
 columnCounter = 1 #First column to insert to
 rowCounter = 2 #First row to insert to
@@ -23,8 +23,10 @@ sheet["B1"] = "Price"
 sheet["B1"].font = Font(bold=True)
 sheet["C1"] = "Rating"
 sheet["C1"].font = Font(bold=True)
+#Creates labels for the columns and bolds them
 
 cell = sheet.cell(row = rowCounter, column = columnCounter)
+#Selects the cell of the excel sheet to edit
 
 firstColumn = 1
 aColumn = str(chr(64 + firstColumn))
@@ -33,10 +35,14 @@ sheet.column_dimensions[aColumn].width = 65
 thirdColumn = 3
 cColumn = str(chr(64 + thirdColumn))
 sheet.column_dimensions[cColumn].width = 20
+#Adjusts widths of columns A & C to look nicely and display most or all of the text
 
 URL = ["https://www.newegg.com/Desktop-Graphics-Cards/SubCategory/ID-48?Tid=7709", "https://www.newegg.com/Desktop-Graphics-Cards/SubCategory/ID-48/Page-2?Tid=7709", "https://www.newegg.com/Desktop-Graphics-Cards/SubCategory/ID-48/Page-3?Tid=7709"]
-gpu = input("Enter desired GPU or leave empty for any ")
-maxPrice = input("Enter max price ")
+#Links to scrape
+gpu = input("Enter desired GPU or leave empty for any: ")
+#Asks the user  for the GPU they want, if  one is wanted
+maxPrice = input("Enter max price: ")
+#Asks the user for the highest price they are willing to pay, cannot be empty
 
 for url in URL:    
     page = requests.get(url)
@@ -44,6 +50,7 @@ for url in URL:
     results = soup.find(class_="list-wrap")
     container = soup.find_all("div", class_="item-container")
     print()
+    #Acesses each item on the webpage with each iteration of this loop
 
     for containerElement in container:
         brandingElement = containerElement.find("div", class_="item-branding")
@@ -52,7 +59,7 @@ for url in URL:
         priceElement = containerElement.find("li", class_="price-current")
         price = str(priceElement.text)
         ratingElement = containerElement.find("i", class_="rating")
-        
+        #Gathers the information from the item's section on the webpage      
   
         for char in title:
             title = title.replace("[", "")
@@ -64,10 +71,12 @@ for url in URL:
             price = price.replace("$", "")
             price = price.replace(",", "")
             price = price.split("(")[0]
-        
+        #This will strip unwanted characters from title and  price
         
         price = int(float(price))
         maxPrice = int(float(maxPrice))
+        #Typecast for comparisons
+
         if gpu in title and price <= maxPrice:       
             print(title.split("GDDR")[0])
             cell = sheet.cell(row = rowCounter, column = columnCounter)
@@ -90,7 +99,8 @@ for url in URL:
                 columnCounter += 1
             print()
             rowCounter += 1
-            columnCounter = 1    
+            columnCounter = 1
+        #This if statement prints out and sends the data to an excel spreadsheet if the item the for loop is looking at is in the gpu string that the user input earlier        
         elif gpu == "" and price <= maxPrice:
             print(title.split("GDDR")[0])
             cell.value = title.split("GDDR")[0]
@@ -114,5 +124,7 @@ for url in URL:
             print()
             rowCounter += 1
             columnCounter = 1
+        #Same as the first but handles the case that the user inserts nothing into the gpu input    
           
-wb.save("C:\\"wherever the data spreadsheet is"\\data.xlsx")
+wb.save("C:\\Utilities\\Comp Sci Topics Stuff\\data.xlsx")
+#Saves the excel spreadsheet
