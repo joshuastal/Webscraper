@@ -126,5 +126,5 @@ for url in URL:
             columnCounter = 1
         #Same as the first but handles the case that the user inserts nothing into the gpu input    
           
-wb.save("C:\\Utilities\\Comp Sci Topics Stuff\\data.xlsx")
+wb.save("directory to data.xlsx using two \ instead of one \ in path")
 #Saves the excel spreadsheet
